@@ -1,0 +1,299 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #f8f9ff;
+  --color-surface-dim: #d5dae4;
+  --color-surface-bright: #f8f9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #eef4fe;
+  --color-surface-container: #e9eef8;
+  --color-surface-container-high: #e3e8f3;
+  --color-surface-container-highest: #dde3ed;
+  --color-on-surface: #161c23;
+  --color-on-surface-variant: #44474a;
+  --color-inverse-surface: #2b3139;
+  --color-inverse-on-surface: #ebf1fb;
+  --color-outline: #75777a;
+  --color-outline-variant: #c5c6ca;
+  --color-surface-tint: #5c5f62;
+  --color-primary: #070a0c;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1e2124;
+  --color-on-primary-container: #86888c;
+  --color-inverse-primary: #c5c6ca;
+  --color-secondary: #775a19;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #fed488;
+  --color-on-secondary-container: #785a1a;
+  --color-tertiary: #000d03;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #092613;
+  --color-on-tertiary-container: #709076;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-primary-fixed: #e1e2e6;
+  --color-primary-fixed-dim: #c5c6ca;
+  --color-on-primary-fixed: #191c1f;
+  --color-on-primary-fixed-variant: #44474a;
+  --color-secondary-fixed: #ffdea5;
+  --color-secondary-fixed-dim: #e9c176;
+  --color-on-secondary-fixed: #261900;
+  --color-on-secondary-fixed-variant: #5d4201;
+  --color-tertiary-fixed: #c9ebcd;
+  --color-tertiary-fixed-dim: #aecfb2;
+  --color-on-tertiary-fixed: #04210e;
+  --color-on-tertiary-fixed-variant: #304d37;
+  --color-background: #f8f9ff;
+  --color-on-background: #161c23;
+  --color-surface-variant: #dde3ed;
+
+  --font-headline-xl: "Outfit", sans-serif;
+  --font-headline-xl-mobile: "Outfit", sans-serif;
+  --font-headline-lg: "Outfit", sans-serif;
+  --font-headline-sm: "Outfit", sans-serif;
+  --font-display-lg: "Outfit", sans-serif;
+  --font-display-lg-mobile: "Outfit", sans-serif;
+  --font-body-lg: "Inter", sans-serif;
+  --font-body-md: "Inter", sans-serif;
+  --font-body-sm: "Inter", sans-serif;
+  --font-label-caps: "Inter", sans-serif;
+  --font-label-md: "Inter", sans-serif;
+  --font-label-sm: "Inter", sans-serif;
+  --font-code-data: "Inter", monospace;
+}
+
+@layer base {
+  html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+  }
+  body {
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+}
+
+/* Custom Spacing & Typography Utilities */
+.px-gutter-mobile {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+.px-margin-mobile {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.pt-space-sm {
+  padding-top: 0.5rem;
+}
+.pt-space-md {
+  padding-top: 1rem;
+}
+.pb-space-sm {
+  padding-bottom: 0.5rem;
+}
+.pb-space-md {
+  padding-bottom: 1rem;
+}
+.pb-space-lg {
+  padding-bottom: 1.5rem;
+}
+.pb-space-xl {
+  padding-bottom: 2.5rem;
+}
+.p-space-xs {
+  padding: 0.25rem;
+}
+.p-space-sm {
+  padding: 0.5rem;
+}
+.p-space-md {
+  padding: 1rem;
+}
+.p-space-lg {
+  padding: 1.5rem;
+}
+.gap-space-xs {
+  gap: 0.25rem;
+}
+.gap-space-sm {
+  gap: 0.5rem;
+}
+.gap-space-md {
+  gap: 1rem;
+}
+.gap-space-lg {
+  gap: 1.5rem;
+}
+.mt-space-xs {
+  margin-top: 0.25rem;
+}
+.mt-space-sm {
+  margin-top: 0.5rem;
+}
+.mt-space-md {
+  margin-top: 1rem;
+}
+.mt-space-lg {
+  margin-top: 1.5rem;
+}
+.mb-space-xs {
+  margin-bottom: 0.25rem;
+}
+.mb-space-sm {
+  margin-bottom: 0.5rem;
+}
+.mb-space-md {
+  margin-bottom: 1rem;
+}
+.mb-space-lg {
+  margin-bottom: 1.5rem;
+}
+.mb-space-xl {
+  margin-bottom: 2.5rem;
+}
+
+/* Typography styles matching design spec */
+.font-headline-xl-mobile {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+  letter-spacing: -0.015em;
+  font-weight: 500;
+}
+.text-headline-xl-mobile {
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+  letter-spacing: -0.015em;
+}
+.font-headline-sm {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+.text-headline-sm {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  letter-spacing: -0.01em;
+}
+.font-display-lg-mobile {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.25rem;
+  line-height: 2.75rem;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+.text-display-lg-mobile {
+  font-size: 2.25rem;
+  line-height: 2.75rem;
+  letter-spacing: -0.02em;
+}
+.font-label-caps {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+.text-label-caps {
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  letter-spacing: 0.08em;
+}
+.font-label-md {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  letter-spacing: 0em;
+  font-weight: 500;
+}
+.text-label-md {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.font-label-sm {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+}
+.text-label-sm {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+.font-body-md {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  letter-spacing: 0em;
+  font-weight: 400;
+}
+.text-body-md {
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+}
+.font-body-sm {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  letter-spacing: 0.005em;
+  font-weight: 400;
+}
+.text-body-sm {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+}
+.font-code-data {
+  font-family: 'Inter', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+.text-code-data {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Material Symbols styling helper */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Hide scrollbar for clean applet UI */
+::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

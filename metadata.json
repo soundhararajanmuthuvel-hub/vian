@@ -1,0 +1,9 @@
+{
+  "name": "VIAN Architects ERP",
+  "description": "High-precision architectural enterprise resource platform for jobsite execution, daily GPS attendance verification, multi-tenant project matrix, and isolated client portals.",
+  "requestFramePermissions": [
+    "geolocation",
+    "camera"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

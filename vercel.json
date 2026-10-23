@@ -2,8 +2,8 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "source": "/api/:path*",
+      "destination": "https://vian-si5n.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",

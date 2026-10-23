@@ -35,34 +35,36 @@ export const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
   return (
     <div className="flex flex-col w-full pb-28">
       {/* Architectural Drafting Subheader */}
-      <div className="px-margin-mobile pt-space-md pb-space-sm bg-[#eef4fe] flex flex-col gap-space-xs shadow-sm border-b border-[#dde3ed]">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-space-xs">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#775a19]"></span>
-            <span className="font-label-caps text-label-caps text-[#775a19] uppercase tracking-widest">
-              Portfolio Matrix
+      <div className="w-full bg-[#eef4fe] border-b border-[#dde3ed] shadow-sm">
+        <div className="max-w-7xl mx-auto px-margin-mobile md:px-6 pt-space-md pb-space-sm flex flex-col gap-space-xs">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-space-xs">
+              <span className="inline-block w-2 h-2 rounded-full bg-[#775a19]"></span>
+              <span className="font-label-caps text-label-caps text-[#775a19] uppercase tracking-widest">
+                Portfolio Matrix
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 px-space-xs py-0.5 rounded bg-[#e9eef8] text-[#44474a]">
+              <span className="material-symbols-outlined text-[14px] text-[#775a19]">verified_user</span>
+              <span className="font-code-data text-code-data">DB-RLS ACTIVE</span>
+            </div>
+          </div>
+          <div className="flex items-baseline justify-between">
+            <h1 className="font-headline-xl-mobile md:text-2xl text-headline-xl-mobile text-[#070a0c] tracking-tight font-semibold">
+              Active Architectural Projects
+            </h1>
+            <span className="font-label-sm text-label-sm text-[#44474a] font-medium">
+              {projects.length} Total
             </span>
           </div>
-          <div className="flex items-center gap-1.5 px-space-xs py-0.5 rounded bg-[#e9eef8] text-[#44474a]">
-            <span className="material-symbols-outlined text-[14px] text-[#775a19]">verified_user</span>
-            <span className="font-code-data text-code-data">DB-RLS ACTIVE</span>
-          </div>
+          <p className="font-body-sm text-body-sm text-[#44474a]">
+            Centralized dossier and isolated workspace routing for principal architects and site leads.
+          </p>
         </div>
-        <div className="flex items-baseline justify-between">
-          <h1 className="font-headline-xl-mobile text-headline-xl-mobile text-[#070a0c] tracking-tight">
-            Active Architectural Projects
-          </h1>
-          <span className="font-label-sm text-label-sm text-[#44474a] font-medium">
-            {projects.length} Total
-          </span>
-        </div>
-        <p className="font-body-sm text-body-sm text-[#44474a]">
-          Centralized dossier and isolated workspace routing for principal architects.
-        </p>
       </div>
 
       {/* Search & Filter Area */}
-      <div className="px-margin-mobile py-space-md flex flex-col gap-space-sm bg-[#f8f9ff]">
+      <div className="w-full max-w-7xl mx-auto px-margin-mobile md:px-6 py-space-md flex flex-col gap-space-sm bg-[#f8f9ff]">
         {/* Search Bar with Machined Detail */}
         <div className="relative flex items-center w-full">
           <span className="material-symbols-outlined absolute left-3 text-[18px] text-[#75777a]">search</span>
@@ -148,8 +150,8 @@ export const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
         </div>
       </div>
 
-      {/* Interactive Project Cards Section */}
-      <div className="px-margin-mobile flex flex-col gap-space-md pb-space-lg">
+      {/* Interactive Project Cards Section (Responsive Grid for Mobile, Tablet, and Laptop) */}
+      <div className="w-full max-w-7xl mx-auto px-margin-mobile md:px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-space-lg">
         {filteredProjects.length === 0 ? (
           <div className="bg-white p-8 rounded-xl text-center border border-[#dde3ed] text-[#44474a]">
             <span className="material-symbols-outlined text-3xl mb-2 text-[#75777a]">search_off</span>

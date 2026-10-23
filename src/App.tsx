@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { ScreenId, UserRole, Project, FeedItem, CrewMember, StagedPhoto } from './types';
+import { ScreenId, UserRole, Project, FeedItem, CrewMember, StagedPhoto, DeviceMode } from './types';
 import { 
   INITIAL_PROJECTS, 
   INITIAL_FEED_ITEMS, 
@@ -33,7 +33,17 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenId>('home');
   const [userRole, setUserRole] = useState<UserRole>('supervisor');
   const [isDeviceFrame, setIsDeviceFrame] = useState<boolean>(false);
+  const [deviceMode, setDeviceMode] = useState<DeviceMode>('responsive');
   const [activeProjectId, setActiveProjectId] = useState<string>('PRJ-OMR-01');
+
+  const handleDeviceModeChange = (mode: DeviceMode) => {
+    setDeviceMode(mode);
+    if (mode === 'mobile') {
+      setIsDeviceFrame(true);
+    } else {
+      setIsDeviceFrame(false);
+    }
+  };
 
   // Dynamic application state
   const [projects] = useState<Project[]>(INITIAL_PROJECTS);
@@ -223,16 +233,20 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#f1f3f9] text-[#161c23] flex flex-col items-center">
-      {/* Container Wrapper (Supports either Phone Bezel Frame or Responsive Full-Width) */}
+      {/* Container Wrapper (Auto-Responsive, or Laptop/Tablet/Mobile Frame Simulation) */}
       <div 
         className={`w-full transition-all duration-300 min-h-screen flex flex-col bg-[#f8f9ff] ${
-          isDeviceFrame 
+          deviceMode === 'mobile' || isDeviceFrame 
             ? 'max-w-[420px] my-4 rounded-[40px] shadow-2xl border-[8px] border-[#1e2124] overflow-hidden relative' 
-            : 'max-w-2xl shadow-sm border-x border-[#dde3ed]'
+            : deviceMode === 'tablet'
+            ? 'max-w-[768px] my-4 rounded-[28px] shadow-2xl border-[6px] border-[#1e2124] overflow-hidden relative'
+            : deviceMode === 'laptop'
+            ? 'max-w-[1240px] my-4 rounded-2xl shadow-2xl border-[6px] border-[#1e2124] overflow-hidden relative'
+            : 'w-full max-w-7xl mx-auto shadow-sm border-x border-[#dde3ed]'
         }`}
       >
         {/* Device frame simulated speaker / dynamic island if in device mode */}
-        {isDeviceFrame && (
+        {(deviceMode === 'mobile' || isDeviceFrame) && (
           <div className="w-full bg-[#070a0c] pt-2 pb-1 flex justify-center items-center">
             <div className="w-24 h-4 bg-black rounded-full flex items-center justify-center">
               <div className="w-2 h-2 rounded-full bg-blue-900/60 mr-2"></div>
@@ -248,7 +262,12 @@ export default function App() {
           userRole={userRole}
           onToggleRole={handleToggleRole}
           isDeviceFrame={isDeviceFrame}
-          onToggleDeviceFrame={() => setIsDeviceFrame(!isDeviceFrame)}
+          onToggleDeviceFrame={() => {
+            const nextMode = isDeviceFrame ? 'responsive' : 'mobile';
+            handleDeviceModeChange(nextMode);
+          }}
+          deviceMode={deviceMode}
+          onChangeDeviceMode={handleDeviceModeChange}
           onOpenNotifications={() => setIsNotificationsModalOpen(true)}
         />
 
@@ -315,6 +334,7 @@ export default function App() {
           currentScreen={currentScreen}
           onNavigate={handleNavigate}
           userRole={userRole}
+          forceShow={deviceMode === 'mobile' || isDeviceFrame}
         />
 
         {/* Global Toast Notification */}

@@ -26,8 +26,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 }) => {
   return (
     <div className="flex flex-col w-full pb-28">
-      {/* Greeting & Supervisor Identification Header */}
-      <section className="px-gutter-mobile pt-space-sm pb-space-md">
+      <div className="w-full max-w-7xl mx-auto lg:grid lg:grid-cols-12 lg:gap-8 lg:p-6">
+        {/* Left Column (Actions & Context on Laptop / Tablet) */}
+        <div className="lg:col-span-5 xl:col-span-5 flex flex-col gap-space-sm">
+          {/* Greeting & Supervisor Identification Header */}
+          <section className="px-gutter-mobile lg:px-0 pt-space-sm pb-space-xs">
         <div className="flex items-start justify-between gap-space-xs">
           <div className="min-w-0">
             <span className="font-label-caps text-label-caps text-[#44474a] uppercase tracking-widest block">
@@ -225,9 +228,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           <span className="material-symbols-outlined text-[#44474a] text-[20px]">arrow_forward</span>
         </button>
       </section>
+    </div>
 
+    {/* Right Column (Live Feed & Field Logs on Laptop / Tablet) */}
+    <div className="lg:col-span-7 xl:col-span-7 flex flex-col gap-space-sm mt-space-md lg:mt-0">
       {/* Recent Site Feed & Geo-Verification */}
-      <section className="px-gutter-mobile mt-space-md">
+      <section className="px-gutter-mobile lg:px-0">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">
             <span className="font-headline-sm text-headline-sm text-[#070a0c] font-medium tracking-tight">Recent Site Feed</span>
@@ -303,9 +309,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           ))}
         </div>
       </section>
+    </div>
+  </div>
 
       {/* Interactive Quick-Action Floating Button Area */}
-      <aside className="sticky bottom-20 z-30 px-gutter-mobile mt-space-lg w-full max-w-lg mx-auto">
+      <aside className="sticky bottom-20 z-30 px-gutter-mobile mt-space-lg w-full max-w-lg lg:max-w-md mx-auto">
         <div className="relative flex items-center justify-between bg-[#070a0c] text-white rounded-xl px-4 py-3 shadow-xl border border-white/10">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 rounded-lg bg-[#775a19] text-white flex items-center justify-center shrink-0">

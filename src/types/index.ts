@@ -2,6 +2,8 @@ export type ScreenId = 'home' | 'projects' | 'workspace' | 'attendance' | 'clien
 
 export type UserRole = 'supervisor' | 'client' | 'architect';
 
+export type DeviceMode = 'responsive' | 'mobile' | 'tablet' | 'laptop';
+
 export interface Project {
   id: string;
   code: string;

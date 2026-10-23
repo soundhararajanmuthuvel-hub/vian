@@ -5,12 +5,15 @@ interface NavigationProps {
   currentScreen: ScreenId;
   onNavigate: (screen: ScreenId) => void;
   userRole: UserRole;
+  forceShow?: boolean;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ currentScreen, onNavigate, userRole }) => {
+export const Navigation: React.FC<NavigationProps> = ({ currentScreen, onNavigate, userRole, forceShow }) => {
+  const visibilityClass = forceShow ? 'fixed bottom-0 left-0 right-0 z-40' : 'fixed bottom-0 left-0 right-0 z-40 md:hidden';
+
   if (userRole === 'client') {
     return (
-      <nav className="fixed bottom-0 left-0 right-0 z-40 pb-safe bg-[#f8f9ff]/90 backdrop-blur-xl border-t border-[#dde3ed] shadow-[0_-2px_12px_rgba(0,0,0,0.03)]">
+      <nav className={`${visibilityClass} pb-safe bg-[#f8f9ff]/90 backdrop-blur-xl border-t border-[#dde3ed] shadow-[0_-2px_12px_rgba(0,0,0,0.03)]`}>
         <div className="flex items-center justify-around h-16 max-w-lg mx-auto px-2">
           <button
             onClick={() => onNavigate('client-portal')}
@@ -58,7 +61,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentScreen, onNavigat
 
   // Standard Supervisor Bottom Navigation
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 pb-safe bg-[#f8f9ff]/90 backdrop-blur-xl border-t border-[#dde3ed] shadow-[0_-1px_8px_rgba(0,0,0,0.04)]">
+    <nav className={`${visibilityClass} pb-safe bg-[#f8f9ff]/90 backdrop-blur-xl border-t border-[#dde3ed] shadow-[0_-1px_8px_rgba(0,0,0,0.04)]`}>
       <div className="h-16 px-2 flex items-center justify-around max-w-lg mx-auto">
         {/* 1. Home */}
         <button

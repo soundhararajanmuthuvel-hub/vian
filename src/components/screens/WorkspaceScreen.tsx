@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Project, StagedPhoto } from '../../types';
+import { getApiUrl } from '../../utils/api';
 
 interface WorkspaceScreenProps {
   activeProject: Project;
@@ -55,17 +56,28 @@ export const WorkspaceScreen: React.FC<WorkspaceScreenProps> = ({
       setUploadProgress({ current: i + 1, total: stagedPhotos.length });
 
       try {
-        const response = await fetch('/api/upload-cloudinary', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            image: photo.imageUrl,
-            title: photo.title,
-            zone: selectedCategory,
-            coordinates: photo.coordinates,
-            accuracy: photo.accuracy
-          })
+        const payload = JSON.stringify({
+          image: photo.imageUrl,
+          title: photo.title,
+          zone: selectedCategory,
+          coordinates: photo.coordinates,
+          accuracy: photo.accuracy
         });
+
+        let response: Response;
+        try {
+          response = await fetch(getApiUrl('/api/upload-cloudinary'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload
+          });
+        } catch {
+          response = await fetch(getApiUrl('/api/upload-cloudinary', true), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload
+          });
+        }
 
         const data = await response.json();
         if (response.ok && data.url) {

@@ -14,8 +14,43 @@ async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
 
+  // Enable Cross-Origin Resource Sharing (CORS) for Vercel frontends (vian-erp.vercel.app, vian-orcin.vercel.app)
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    const allowed = origin && (
+      origin === 'https://vian-erp.vercel.app' ||
+      origin === 'https://vian-orcin.vercel.app' ||
+      /^https:\/\/([a-zA-Z0-9-]+\.)*vercel\.app$/.test(origin) ||
+      origin.startsWith('http://localhost:') ||
+      origin.startsWith('http://127.0.0.1:')
+    );
+
+    if (allowed && origin) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+    } else {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-Device-Mode');
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200);
+    }
+    next();
+  });
+
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+  // Health check endpoint for Render monitoring
+  app.get('/api/health', (req, res) => {
+    res.json({
+      status: 'online',
+      service: 'VIAN ERP Backend (Render)',
+      frontendUrl: 'https://vian-orcin.vercel.app',
+      timestamp: new Date().toISOString()
+    });
+  });
 
   // API Status & Configuration Endpoint
   app.get('/api/cloudinary-status', (req, res) => {

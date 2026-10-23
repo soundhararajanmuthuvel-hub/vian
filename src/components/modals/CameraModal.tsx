@@ -4,6 +4,7 @@ import {
   stampCanvasWithSiteData, 
   REGISTERED_SITE_GEOFENCES 
 } from '../../utils/gpsComparison';
+import { getApiUrl } from '../../utils/api';
 
 interface CameraModalProps {
   isOpen: boolean;
@@ -192,18 +193,30 @@ export const CameraModal: React.FC<CameraModalProps> = ({ isOpen, onClose, onCap
       setUploadMessage(`Streaming stamped photo (${gpsComparison.matchedSite.name}) to Cloudinary...`);
 
       try {
-        const response = await fetch('/api/upload-cloudinary', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            image: finalDataUrl,
-            title,
-            zone,
-            coordinates: `${currentLat.toFixed(4)}° N, ${currentLng.toFixed(4)}° E`,
-            accuracy: gpsAccuracy,
-            siteName: gpsComparison.matchedSite.name
-          })
+        const payload = JSON.stringify({
+          image: finalDataUrl,
+          title,
+          zone,
+          coordinates: `${currentLat.toFixed(4)}° N, ${currentLng.toFixed(4)}° E`,
+          accuracy: gpsAccuracy,
+          siteName: gpsComparison.matchedSite.name
         });
+
+        let response: Response;
+        try {
+          response = await fetch(getApiUrl('/api/upload-cloudinary'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload
+          });
+        } catch (fetchErr) {
+          // If proxy fails or direct Render is needed, fallback to direct Render backend URL
+          response = await fetch(getApiUrl('/api/upload-cloudinary', true), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload
+          });
+        }
 
         const data = await response.json();
         if (response.ok && data.url) {

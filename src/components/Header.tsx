@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { ScreenId, UserRole } from '../types';
+import React, { useState, useEffect } from 'react';
+import { ScreenId, UserRole, DeviceMode } from '../types';
+import { checkBackendStatus, RENDER_BACKEND_URL } from '../utils/api';
 
 interface HeaderProps {
   currentScreen: ScreenId;
@@ -8,6 +9,8 @@ interface HeaderProps {
   onToggleRole: () => void;
   isDeviceFrame: boolean;
   onToggleDeviceFrame: () => void;
+  deviceMode?: DeviceMode;
+  onChangeDeviceMode?: (mode: DeviceMode) => void;
   onOpenNotifications: () => void;
 }
 
@@ -18,9 +21,29 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleRole,
   isDeviceFrame,
   onToggleDeviceFrame,
+  deviceMode = 'responsive',
+  onChangeDeviceMode,
   onOpenNotifications
 }) => {
   const [showRoleMenu, setShowRoleMenu] = useState(false);
+  const [backendStatus, setBackendStatus] = useState<{ online: boolean; checking: boolean; latency?: number }>({
+    online: false,
+    checking: true
+  });
+
+  const runHealthCheck = async () => {
+    setBackendStatus(prev => ({ ...prev, checking: true }));
+    const res = await checkBackendStatus();
+    setBackendStatus({
+      online: res.online,
+      checking: false,
+      latency: res.latencyMs
+    });
+  };
+
+  useEffect(() => {
+    runHealthCheck();
+  }, []);
 
   // If in Workspace screen, show the Back button variant from Screen 4
   const isWorkspace = currentScreen === 'workspace';
@@ -79,18 +102,74 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
 
-        {/* Right tools: Device Frame & Role switcher */}
-        <div className="flex items-center gap-2 shrink-0">
+        {/* Right tools: Backend Status, Device Frame & Role switcher */}
+        <div className="flex items-center gap-1.5 shrink-0">
           <button
-            onClick={onToggleDeviceFrame}
-            className={`hidden sm:flex items-center gap-1 px-2 py-0.5 rounded text-[10px] border transition-colors ${
-              isDeviceFrame ? 'bg-white/20 border-white/40 text-white' : 'bg-transparent border-white/20 text-white/70 hover:text-white'
+            onClick={runHealthCheck}
+            className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] border transition-colors ${
+              backendStatus.online 
+                ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-400 hover:bg-emerald-900/60' 
+                : backendStatus.checking 
+                  ? 'bg-amber-950/60 border-amber-500/40 text-amber-300' 
+                  : 'bg-white/10 border-white/20 text-white/70 hover:bg-white/20'
             }`}
-            title="Toggle mobile device frame container"
+            title={`Render Backend (${RENDER_BACKEND_URL}). Click to test connection.`}
           >
-            <span className="material-symbols-outlined text-[13px]">devices</span>
-            <span>{isDeviceFrame ? 'Device' : 'Full'}</span>
+            <span className={`w-1.5 h-1.5 rounded-full ${
+              backendStatus.online 
+                ? 'bg-emerald-400 animate-pulse' 
+                : backendStatus.checking 
+                  ? 'bg-amber-400 animate-spin' 
+                  : 'bg-gray-400'
+            }`} />
+            <span className="font-mono text-[9px]">
+              {backendStatus.checking ? 'Connecting...' : backendStatus.online ? `Render ${backendStatus.latency ? `${backendStatus.latency}ms` : 'Live'}` : 'Render Ready'}
+            </span>
           </button>
+
+          {/* Device Viewport Mode Selectors: Auto / Laptop / Tablet / Mobile */}
+          <div className="hidden sm:flex items-center gap-1 bg-white/10 p-0.5 rounded border border-white/15">
+            <button
+              onClick={() => onChangeDeviceMode ? onChangeDeviceMode('responsive') : onToggleDeviceFrame()}
+              className={`px-1.5 py-0.5 rounded text-[10px] transition-colors flex items-center gap-1 ${
+                deviceMode === 'responsive' && !isDeviceFrame ? 'bg-[#fed488] text-[#070a0c] font-semibold' : 'text-white/70 hover:text-white'
+              }`}
+              title="Full Fluid Responsive (Auto-adapts to your screen width)"
+            >
+              <span className="material-symbols-outlined text-[12px]">fit_screen</span>
+              <span className="hidden md:inline">Auto</span>
+            </button>
+            <button
+              onClick={() => onChangeDeviceMode ? onChangeDeviceMode('laptop') : null}
+              className={`px-1.5 py-0.5 rounded text-[10px] transition-colors flex items-center gap-1 ${
+                deviceMode === 'laptop' ? 'bg-[#fed488] text-[#070a0c] font-semibold' : 'text-white/70 hover:text-white'
+              }`}
+              title="Preview Laptop / Desktop View (1200px)"
+            >
+              <span className="material-symbols-outlined text-[12px]">laptop_mac</span>
+              <span>Laptop</span>
+            </button>
+            <button
+              onClick={() => onChangeDeviceMode ? onChangeDeviceMode('tablet') : null}
+              className={`px-1.5 py-0.5 rounded text-[10px] transition-colors flex items-center gap-1 ${
+                deviceMode === 'tablet' ? 'bg-[#fed488] text-[#070a0c] font-semibold' : 'text-white/70 hover:text-white'
+              }`}
+              title="Preview Tablet View (768px iPad)"
+            >
+              <span className="material-symbols-outlined text-[12px]">tablet_mac</span>
+              <span>Tablet</span>
+            </button>
+            <button
+              onClick={() => onChangeDeviceMode ? onChangeDeviceMode('mobile') : onToggleDeviceFrame()}
+              className={`px-1.5 py-0.5 rounded text-[10px] transition-colors flex items-center gap-1 ${
+                deviceMode === 'mobile' || isDeviceFrame ? 'bg-[#fed488] text-[#070a0c] font-semibold' : 'text-white/70 hover:text-white'
+              }`}
+              title="Preview Mobile Smartphone View (390px)"
+            >
+              <span className="material-symbols-outlined text-[12px]">smartphone</span>
+              <span>Mobile</span>
+            </button>
+          </div>
 
           <button
             onClick={onToggleRole}
@@ -166,6 +245,55 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
           )}
+
+          {/* Desktop & Tablet Navigation Menu (hidden on mobile, visible on md+) */}
+          <nav className="hidden md:flex items-center gap-1 bg-[#eef4fe] p-1 rounded-lg border border-[#dde3ed]">
+            <button
+              onClick={() => onNavigate('home')}
+              className={`px-3 py-1.5 rounded-md text-xs transition-colors flex items-center gap-1.5 ${
+                currentScreen === 'home' ? 'bg-[#ffffff] text-[#070a0c] shadow-sm font-semibold' : 'text-[#44474a] hover:text-[#070a0c]'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[16px]">grid_view</span>
+              <span>Dashboard</span>
+            </button>
+            <button
+              onClick={() => onNavigate('projects')}
+              className={`px-3 py-1.5 rounded-md text-xs transition-colors flex items-center gap-1.5 ${
+                currentScreen === 'projects' ? 'bg-[#ffffff] text-[#070a0c] shadow-sm font-semibold' : 'text-[#44474a] hover:text-[#070a0c]'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[16px]">apartment</span>
+              <span>Projects</span>
+            </button>
+            <button
+              onClick={() => onNavigate('workspace')}
+              className={`px-3 py-1.5 rounded-md text-xs transition-colors flex items-center gap-1.5 ${
+                currentScreen === 'workspace' ? 'bg-[#ffffff] text-[#070a0c] shadow-sm font-semibold' : 'text-[#44474a] hover:text-[#070a0c]'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[16px]">photo_camera</span>
+              <span>Workspace</span>
+            </button>
+            <button
+              onClick={() => onNavigate('attendance')}
+              className={`px-3 py-1.5 rounded-md text-xs transition-colors flex items-center gap-1.5 ${
+                currentScreen === 'attendance' ? 'bg-[#ffffff] text-[#070a0c] shadow-sm font-semibold' : 'text-[#44474a] hover:text-[#070a0c]'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[16px]">badge</span>
+              <span>Attendance</span>
+            </button>
+            <button
+              onClick={() => onNavigate('client-portal')}
+              className={`px-3 py-1.5 rounded-md text-xs transition-colors flex items-center gap-1.5 ${
+                currentScreen === 'client-portal' ? 'bg-[#ffffff] text-[#070a0c] shadow-sm font-semibold' : 'text-[#44474a] hover:text-[#070a0c]'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[16px]">verified_user</span>
+              <span>Client Portal</span>
+            </button>
+          </nav>
 
           {/* Right Action Icons */}
           <div className="flex items-center gap-1 shrink-0">

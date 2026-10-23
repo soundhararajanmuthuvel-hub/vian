@@ -68,7 +68,7 @@ export const AttendanceScreen: React.FC<AttendanceScreenProps> = ({
   return (
     <div className="flex flex-col w-full pb-28">
       {/* Header Info */}
-      <div className="px-gutter-mobile pt-space-md pb-space-sm flex flex-col gap-1">
+      <div className="w-full max-w-7xl mx-auto px-gutter-mobile md:px-6 pt-space-md pb-space-sm flex flex-col gap-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#775a19]"></span>
@@ -80,7 +80,7 @@ export const AttendanceScreen: React.FC<AttendanceScreenProps> = ({
             REV-4.1
           </span>
         </div>
-        <h1 className="font-headline-xl-mobile text-headline-xl-mobile font-semibold tracking-tight text-[#070a0c]">
+        <h1 className="font-headline-xl-mobile md:text-2xl text-headline-xl-mobile font-semibold tracking-tight text-[#070a0c]">
           Daily Attendance
         </h1>
         <p className="font-body-sm text-body-sm text-[#44474a] flex items-center gap-1">
@@ -89,8 +89,11 @@ export const AttendanceScreen: React.FC<AttendanceScreenProps> = ({
         </p>
       </div>
 
-      {/* Active Site Session Card */}
-      <div className="px-gutter-mobile mb-space-md">
+      <div className="w-full max-w-7xl mx-auto px-gutter-mobile md:px-6 lg:grid lg:grid-cols-12 lg:gap-8">
+        {/* Left Column (Active Site Session & Workspace on Laptop / Tablet) */}
+        <div className="lg:col-span-5 flex flex-col gap-space-md">
+          {/* Active Site Session Card */}
+          <div className="mb-space-md lg:mb-0">
         <div className="bg-[#ffffff] rounded-xl p-space-md shadow-sm relative overflow-hidden border border-[#dde3ed]">
           <div className="flex items-start justify-between gap-space-sm mb-3">
             <div className="flex items-center gap-space-sm min-w-0">
@@ -222,8 +225,50 @@ export const AttendanceScreen: React.FC<AttendanceScreenProps> = ({
         </div>
       </div>
 
+      {/* GPS Geofence Verified Card (In Left Column) */}
+      <div className="mb-space-md lg:mb-0">
+        <div className="bg-[#ffffff] rounded-xl p-space-md shadow-sm flex flex-col gap-3 border border-[#dde3ed]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-[#c9ebcd] flex items-center justify-center text-[#04210e]">
+                <span className="material-symbols-outlined text-[16px]">verified</span>
+              </div>
+              <span className="font-label-md text-label-md font-medium text-[#070a0c]">GPS Geofence Verified</span>
+            </div>
+            <span className="font-code-data text-code-data text-[#775a19]">Accurate ±3m</span>
+          </div>
+          <p className="font-body-sm text-body-sm text-[#44474a]">
+            Site logs locked to current coordinates. Timestamp and telemetry will be signed by Manoj V. (Digital Cert: <span className="font-code-data text-code-data text-[#070a0c]">0x9F4C...B2</span>).
+          </p>
+          <button 
+            onClick={handleSaveAttendance}
+            disabled={isLocked}
+            className={`w-full h-12 rounded-lg transition-all flex items-center justify-center gap-2 font-label-md text-label-md font-medium shadow-sm active:scale-[0.99] ${
+              isLocked 
+                ? 'bg-[#dde3ed] text-[#44474a] cursor-not-allowed' 
+                : 'bg-[#775a19] text-white hover:bg-[#5d4201]'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[20px]">
+              {isLocked ? 'lock' : 'task_alt'}
+            </span>
+            <span>{isLocked ? 'Attendance Submitted (Locked)' : 'Save Daily Attendance'}</span>
+          </button>
+
+          {isLocked && (
+            <div className="p-3 rounded-lg bg-[#c9ebcd] text-[#04210e] flex items-center gap-2 font-body-sm text-body-sm transition-all border border-[#aecfb2]">
+              <span className="material-symbols-outlined text-[18px]">lock</span>
+              <span>Attendance roster confirmed & locked for Thursday, Oct 24.</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
+    {/* Right Column (Staff Roster & History on Laptop / Tablet) */}
+    <div className="lg:col-span-7 flex flex-col gap-space-md mt-space-md lg:mt-0">
       {/* Staff & Site Crew Section */}
-      <div className="px-gutter-mobile mb-space-md flex flex-col gap-space-sm">
+      <div className="mb-space-md flex flex-col gap-space-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <span className="font-headline-sm text-headline-sm font-medium text-[#070a0c]">Staff & Site Crew</span>
@@ -346,47 +391,8 @@ export const AttendanceScreen: React.FC<AttendanceScreenProps> = ({
         </div>
       </div>
 
-      {/* GPS Geofence Verified Card */}
-      <div className="px-gutter-mobile mb-space-md">
-        <div className="bg-[#ffffff] rounded-xl p-space-md shadow-sm flex flex-col gap-3 border border-[#dde3ed]">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-[#c9ebcd] flex items-center justify-center text-[#04210e]">
-                <span className="material-symbols-outlined text-[16px]">verified</span>
-              </div>
-              <span className="font-label-md text-label-md font-medium text-[#070a0c]">GPS Geofence Verified</span>
-            </div>
-            <span className="font-code-data text-code-data text-[#775a19]">Accurate ±3m</span>
-          </div>
-          <p className="font-body-sm text-body-sm text-[#44474a]">
-            Site logs locked to current coordinates. Timestamp and telemetry will be signed by Manoj V. (Digital Cert: <span className="font-code-data text-code-data text-[#070a0c]">0x9F4C...B2</span>).
-          </p>
-          <button 
-            onClick={handleSaveAttendance}
-            disabled={isLocked}
-            className={`w-full h-12 rounded-lg transition-all flex items-center justify-center gap-2 font-label-md text-label-md font-medium shadow-sm active:scale-[0.99] ${
-              isLocked 
-                ? 'bg-[#dde3ed] text-[#44474a] cursor-not-allowed' 
-                : 'bg-[#775a19] text-white hover:bg-[#5d4201]'
-            }`}
-          >
-            <span className="material-symbols-outlined text-[20px]">
-              {isLocked ? 'lock' : 'task_alt'}
-            </span>
-            <span>{isLocked ? 'Attendance Submitted (Locked)' : 'Save Daily Attendance'}</span>
-          </button>
-
-          {isLocked && (
-            <div className="p-3 rounded-lg bg-[#c9ebcd] text-[#04210e] flex items-center gap-2 font-body-sm text-body-sm transition-all border border-[#aecfb2]">
-              <span className="material-symbols-outlined text-[18px]">lock</span>
-              <span>Attendance roster confirmed & locked for Thursday, Oct 24.</span>
-            </div>
-          )}
-        </div>
-      </div>
-
       {/* Attendance History (Recent) */}
-      <div className="px-gutter-mobile mb-space-xl">
+      <div className="mb-space-xl">
         <div className="bg-[#ffffff] rounded-xl p-space-md shadow-sm flex flex-col gap-3 border border-[#dde3ed]">
           <div className="flex items-center justify-between pb-2 border-b border-[#dde3ed]">
             <div className="flex items-center gap-2">
@@ -432,5 +438,7 @@ export const AttendanceScreen: React.FC<AttendanceScreenProps> = ({
         </div>
       </div>
     </div>
+  </div>
+</div>
   );
 };
